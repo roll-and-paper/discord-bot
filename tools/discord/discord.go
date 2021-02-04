@@ -15,6 +15,15 @@ const AllPermissionForChannel int64 = discordgo.PermissionViewChannel |
 	discordgo.PermissionReadMessageHistory |
 	discordgo.PermissionUseExternalEmojis
 
+const AllPermissionForChannelExceptView int64 = discordgo.PermissionAddReactions |
+	discordgo.PermissionSendMessages |
+	discordgo.PermissionSendTTSMessages |
+	discordgo.PermissionManageMessages |
+	discordgo.PermissionEmbedLinks |
+	discordgo.PermissionAttachFiles |
+	discordgo.PermissionReadMessageHistory |
+	discordgo.PermissionUseExternalEmojis
+
 func GetUserIdFromMention(mention string) string {
 	if strings.HasPrefix(mention, "<@!") && strings.HasSuffix(mention, ">") {
 		return strings.TrimSuffix(strings.TrimPrefix(mention, "<@!"), ">")

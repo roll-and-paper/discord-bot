@@ -103,6 +103,10 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 		withBotChannel, err = sess.GuildChannelCreateComplex(guild.ID, discordgo.GuildChannelCreateData{
 			Name:     i18n.Must(state.Language, "name.channel.with-bot", nil),
 			ParentID: playersChannel.ID,
+			PermissionOverwrites: []*discordgo.PermissionOverwrite{
+				{ID: state.Roles.Master, Type: discordgo.PermissionOverwriteTypeRole, Allow: discord.AllPermissionForChannel},
+				{ID: guild.ID, Deny: discord.AllPermissionForChannelExceptView, Allow: discordgo.PermissionViewChannel},
+			},
 		})
 		if err != nil {
 			return err
