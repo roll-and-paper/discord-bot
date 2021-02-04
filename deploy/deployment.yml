@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roll-and-paper-bot
+  namespace: roll-and-paper
+  labels:
+    app: roll-and-paper-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roll-and-paper-bot
+  template:
+    metadata:
+      labels:
+        app: roll-and-paper-bot
+    spec:
+      containers:
+        - name: bot
+          image: docker.pkg.github.com/roll-and-paper/discord-bot/discord-bot:latest
+          imagePullPolicy: Always
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: roll-and-paper-secret
+                  key: mongo_uri
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: roll-and-paper-secret
+                  key: discord_token
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /@/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /@/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
