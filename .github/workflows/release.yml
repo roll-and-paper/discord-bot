@@ -1,13 +1,11 @@
 name: goreleaser
 
 on:
-  pull_request:
-    branches: [ master ]
   push:
     branches: [ master ]
 
 jobs:
-  goreleaser:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
