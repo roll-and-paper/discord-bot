@@ -1,4 +1,4 @@
-FROM alpine as builder
+FROM amd64/alpine as builder
 RUN apk update && apk add ca-certificates
 
 FROM scratch
