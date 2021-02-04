@@ -18,16 +18,17 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
-#dockers:
-#  - image_templates:
-#      - user/repo
-#    build_flag_templates:
-#      - "--pull"
-#      - "--label=org.opencontainers.image.created={{.Date}}"
-#      - "--label=org.opencontainers.image.title={{.ProjectName}}"
-#      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-#      - "--label=org.opencontainers.image.version={{.Version}}"
-#      - "--platform=linux/arm64"
+dockers:
+  - image_templates:
+      - "docker.pkg.github.com/roll-and-paper/discord-bot/discord-bot:latest"
+      - "docker.pkg.github.com/roll-and-paper/discord-bot/discord-bot:{{ .Tag }}"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--platform=linux/arm64"
 changelog:
   sort: asc
   filters:
