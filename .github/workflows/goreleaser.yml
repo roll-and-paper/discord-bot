@@ -36,5 +36,6 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: deploy
-          repo: roll-and-paper/deploy  
+          repo: roll-and-paper/deploy
+          ref: master 
           token: ${{ secrets.DISPATCH_SECRET }}
