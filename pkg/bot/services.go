@@ -1,9 +1,9 @@
-package services
+package bot
 
 import (
 	"context"
 	"github.com/bwmarrin/discordgo"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
+	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/errors"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/storage"
 	"github.com/thoas/go-funk"
@@ -12,7 +12,7 @@ import (
 type Fields map[string]interface{}
 
 type Services struct {
-	Save func(*models.ServerState, Fields, context.Context) error
+	Save func(*gp.ServerState, Fields, context.Context) error
 }
 
 func (s *Services) GetRole(guild *discordgo.Guild, id string) *discordgo.Role {
@@ -38,7 +38,7 @@ func (s *Services) GetChannel(sess *discordgo.Session, id string) (*discordgo.Ch
 
 func New(col storage.Storage) *Services {
 	return &Services{
-		Save: func(state *models.ServerState, toUpdate Fields, ctx context.Context) error {
+		Save: func(state *gp.ServerState, toUpdate Fields, ctx context.Context) error {
 			return col.Save(state.Id, toUpdate, state, ctx)
 		},
 	}

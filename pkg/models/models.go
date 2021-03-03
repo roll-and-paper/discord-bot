@@ -14,7 +14,8 @@ const (
 )
 
 type Config struct {
-	Prefix string `json:"prefix" bson:"prefix"`
+	Prefix     string `json:"prefix" bson:"prefix"`
+	GameSystem string `json:"gameSystem" bson:"gameSystem"`
 }
 
 type Roles struct {

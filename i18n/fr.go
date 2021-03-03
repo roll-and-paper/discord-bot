@@ -18,6 +18,9 @@ var fr = D{
 			"player": D{
 				"help": "Command : {{.Config.Prefix}}set player `@joueur` nom du joueur",
 			},
+			"game-system": D{
+				"help": "Commande : {{.Config.Prefix}}set game-system `value`\nValue : (vampire-dark-ages)",
+			},
 		},
 		"oops": "Ooops, une erreur c'est produite",
 	},
@@ -48,6 +51,10 @@ var fr = D{
 					"channel-missing":        "le channel `Entres joueurs & maitres` n'exite pas, as tu initialisé le serveur avec `{{.Config.Prefix}}init` ?",
 					"have-already-character": "le joueur {{.Name}} interprete déjà le personnage {{.CharacterName}}, pour pouvoir lui réafecter un nouveau personnage, supprime le channel de son personne existant",
 					"cannot-change-name":     "Je n'ai pas les droits pour changer le nom de {{.Name}} pour {{.CharacterName}}",
+				},
+				"game-system": D{
+					"missing": "tu n'as pas précisé le systeme de jeu désiré",
+					"unknown-game-system": "je ne connais pas le systeme de jeu `{{.Wanted}}`, je ne connais que `{{.AllSystems}}`",
 				},
 			},
 			"init": D{

@@ -1,15 +1,15 @@
-package services
+package bot
 
 import (
 	"context"
 	"github.com/bwmarrin/discordgo"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
+	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"github.com/thoas/go-funk"
 	"strings"
 )
 
-func setPlayer(s *Services, msg *discordgo.Message, sess *discordgo.Session, state *models.ServerState, args []string) error {
+func setPlayer(s *Services, msg *discordgo.Message, sess *discordgo.Session, state *gp.ServerState, args []string) error {
 	if len(args) < 2 {
 		_, err := discord.SendMessage(msg.ChannelID, sess, state.Language, "errors.commands.set.player.missing", state)
 		return err
@@ -50,7 +50,7 @@ func setPlayer(s *Services, msg *discordgo.Message, sess *discordgo.Session, sta
 	}
 
 	characterName := strings.Join(args[1:], " ")
-	currentPlayedCharacter, exists := funk.Find(state.Players, func(p models.Player) bool { return p.Id == maybePlayer.User.ID }).(models.Player)
+	currentPlayedCharacter, exists := funk.Find(state.Players, func(p gp.Player) bool { return p.Id == maybePlayer.User.ID }).(gp.Player)
 	if exists {
 		currentPlayedCharacterChannel, err := s.GetChannel(sess, currentPlayedCharacter.Channel)
 		if err != nil {
@@ -82,8 +82,8 @@ func setPlayer(s *Services, msg *discordgo.Message, sess *discordgo.Session, sta
 			"CharacterName": currentPlayedCharacter.CharacterName,
 		})
 	}
-	newPlayers := funk.Filter(state.Players, func(p models.Player) bool { return p.Id != maybePlayer.User.ID }).([]models.Player)
-	if err := s.Save(state, Fields{"players": append(newPlayers, models.Player{Id: maybePlayer.User.ID, CharacterName: characterName, Channel: playerChannel.ID})}, context.Background()); err != nil {
+	newPlayers := funk.Filter(state.Players, func(p gp.Player) bool { return p.Id != maybePlayer.User.ID }).([]gp.Player)
+	if err := s.Save(state, Fields{"players": append(newPlayers, gp.Player{Id: maybePlayer.User.ID, CharacterName: characterName, Channel: playerChannel.ID})}, context.Background()); err != nil {
 		return err
 	}
 	return sess.MessageReactionAdd(msg.ChannelID, msg.ID, "👌")

@@ -1,15 +1,15 @@
-package services
+package bot
 
 import (
 	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dohr-michael/roll-and-paper-bot/i18n"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
+	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"log"
 )
 
-func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *models.ServerState) error {
+func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *gp.ServerState) error {
 	guild, err := sess.Guild(msg.GuildID)
 	if err != nil {
 		return err
@@ -118,7 +118,7 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 		if err != nil {
 			return err
 		}
-		_, err = discord.SendMessage(withBotChannel.ID, sess, state.Language, "messages.init.finished", nil)
+		_, err = discord.SendMessage(withBotChannel.ID, sess, state.Language, "messages.init.finished", state)
 		if err != nil {
 			return err
 		}

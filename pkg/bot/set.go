@@ -1,21 +1,22 @@
-package services
+package bot
 
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
+	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"log"
 	"strings"
 )
 
-var setCommands map[string]func(*Services, *discordgo.Message, *discordgo.Session, *models.ServerState, []string) error
+var setCommands map[string]func(*Services, *discordgo.Message, *discordgo.Session, *gp.ServerState, []string) error
 var allSetCommands string
 
 func init() {
-	setCommands = map[string]func(*Services, *discordgo.Message, *discordgo.Session, *models.ServerState, []string) error{
-		"master": setMaster,
-		"player": setPlayer,
+	setCommands = map[string]func(*Services, *discordgo.Message, *discordgo.Session, *gp.ServerState, []string) error{
+		"master":      setMaster,
+		"player":      setPlayer,
+		"game-system": setGameSystem,
 	}
 	tmp := make([]string, 0)
 	for key := range setCommands {
@@ -24,7 +25,7 @@ func init() {
 	allSetCommands = strings.Join(tmp, ", ")
 }
 
-func (s *Services) Set(msg *discordgo.Message, sess *discordgo.Session, state *models.ServerState, args []string) error {
+func (s *Services) Set(msg *discordgo.Message, sess *discordgo.Session, state *gp.ServerState, args []string) error {
 	if len(args) == 0 {
 		_, err := discord.SendMessage(msg.ChannelID, sess, state.Language, "errors.commands.set.bad-command", map[string]interface{}{"Cmd": "", "AllCmd": allSetCommands})
 		return err

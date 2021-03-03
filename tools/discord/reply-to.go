@@ -13,5 +13,9 @@ func ReplyTo(msg *discordgo.Message, sess *discordgo.Session, lang string, key s
 		return nil, err
 	}
 
+	return ReplyToWithContent(msg, sess, content)
+}
+
+func ReplyToWithContent(msg *discordgo.Message, sess *discordgo.Session, content string) (*discordgo.Message, error) {
 	return sess.ChannelMessageSendReply(msg.ChannelID, content, msg.Reference())
 }

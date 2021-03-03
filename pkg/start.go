@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dohr-michael/roll-and-paper-bot/config"
+	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot"
 	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/services"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/storage"
 	"github.com/gin-gonic/gin"
@@ -18,7 +18,7 @@ import (
 )
 
 func onMessageHandler(col storage.Storage) func(*discordgo.Session, *discordgo.MessageCreate) {
-	serv := services.New(col)
+	serv := bot.New(col)
 	return func(sess *discordgo.Session, msg *discordgo.MessageCreate) {
 		log.Printf("on message")
 
