@@ -17,6 +17,7 @@ func init() {
 		"master":      setMaster,
 		"player":      setPlayer,
 		"game-system": setGameSystem,
+		"prefix":      setPrefix,
 	}
 	tmp := make([]string, 0)
 	for key := range setCommands {

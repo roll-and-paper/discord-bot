@@ -21,6 +21,9 @@ var fr = D{
 			"game-system": D{
 				"help": "Commande : {{.Config.Prefix}}set game-system `value`\nValue : (vampire-dark-ages)",
 			},
+			"prefix": D{
+				"help": "Command : {{.Config.Prefix}}set prefix `value`",
+			},
 		},
 		"oops": "Ooops, une erreur c'est produite",
 	},
@@ -53,8 +56,11 @@ var fr = D{
 					"cannot-change-name":     "Je n'ai pas les droits pour changer le nom de {{.Name}} pour {{.CharacterName}}",
 				},
 				"game-system": D{
-					"missing": "tu n'as pas précisé le systeme de jeu désiré",
+					"missing":             "tu n'as pas précisé le systeme de jeu désiré",
 					"unknown-game-system": "je ne connais pas le systeme de jeu `{{.Wanted}}`, je ne connais que `{{.AllSystems}}`",
+				},
+				"prefix": D{
+					"missing": "tu n'as pas précisé le nouveau préfix",
 				},
 			},
 			"init": D{
