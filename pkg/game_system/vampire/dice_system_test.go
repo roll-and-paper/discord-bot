@@ -26,7 +26,22 @@ func TestRoll(t *testing.T) {
 				{7, nil},
 				{9, nil},
 				{1, nil},
-			}, "7d : count(>= 8) + count(= 10) x 1 - count(= 0)"),
+			}, "7d : count(>= 8) + count(= 10) x 1 - count(= 1)"),
+		},
+		{1, 0, 1, roller.NewResult(1,
+			[]roller.DiceResult{
+				{5, nil},
+			}, "1d : count(= 10) x 1 - count(= 1)"),
+		},
+		{1, 5, 0, roller.NewResult(1,
+			[]roller.DiceResult{
+				{9, nil},
+			}, "1d : count(>= 5) - count(= 1)"),
+		},
+		{1, 0, 0, roller.NewResult(1,
+			[]roller.DiceResult{
+				{4, nil},
+			}, "1d : - count(= 1)"),
 		},
 	}
 	for idx, tt := range tests {

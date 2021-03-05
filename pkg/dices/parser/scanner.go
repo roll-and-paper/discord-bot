@@ -3,6 +3,7 @@ package parser
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -47,9 +48,9 @@ var simpleBinding = map[rune]TokenType{
 
 type Scanner struct{ r *bufio.Reader }
 
-func NewScanner(value string) *Scanner { return &Scanner{r: bufio.NewReader(strings.NewReader(value))} }
+func NewLexer(value string) *Scanner { return &Scanner{r: bufio.NewReader(strings.NewReader(value))} }
 
-func (s *Scanner) ScanAll() []Token {
+func (s *Scanner) ScanAll() ([]Token, error) {
 	result := make([]Token, 0)
 	for {
 		t, v := s.scan()
@@ -57,8 +58,11 @@ func (s *Scanner) ScanAll() []Token {
 			break
 		}
 		result = append(result, Token{t, v})
+		if t == Illegal {
+			return nil, fmt.Errorf("illegal token %s ", v)
+		}
 	}
-	return result
+	return result, nil
 }
 
 func (s *Scanner) scan() (TokenType, string) {

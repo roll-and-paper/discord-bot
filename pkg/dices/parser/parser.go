@@ -2,42 +2,55 @@ package parser
 
 import "github.com/dohr-michael/roll-and-paper-bot/pkg/dices/roller"
 
-func Parse(value string) (*roller.Roller, error) {
-	all := NewScanner(value).ScanAll()
-	a := &analyser{
-		tokens:  all,
-		size:    len(all),
-		current: 0,
+func newIterator(tokens []Token) *iterator {
+	return &iterator{
+		tokens: tokens,
+		length: len(tokens),
+		idx:    0,
 	}
-	return a.Parse()
 }
 
-type analyser struct {
-	tokens  []Token
-	size    int
-	current int
-}
-
-func (a *analyser) Parse() (*roller.Roller, error) {
-
+func Parse(value string) (*roller.Roller, error) {
+	//all, err := NewLexer(value).ScanAll()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//a := &iterator{
+	//	tokens:  all,
+	//	size:    len(all),
+	//	current: 0,
+	//}
 	return nil, nil
 }
 
-func (a *analyser) scan() (tok Token) {
-	if a.current >= a.size {
-		return Token{EOF, ""}
-	}
-	tok = a.tokens[a.current]
-	a.current++
-	return
+//func
+
+type iterator struct {
+	tokens []Token
+	length int
+	idx    int
 }
 
-func (a *analyser) scanIgnoreWhitespace() (tok Token) {
-	tok = a.scan()
-	if tok.Type == WS {
-		tok = a.scan()
+func (t *iterator) currentAndMove(potentialCount ...int) (tok Token) {
+	count := 1
+	if len(potentialCount) > 0 {
+		count = potentialCount[0]
 	}
-	return
+	result := t.current()
+	if result.Type != EOF {
+		t.idx += count
+	}
+	return result
 }
 
-func (a *analyser) unscan() { a.current-- }
+func (t *iterator) get(idx int) Token {
+	if idx >= t.length {
+		return Token{
+			Type:  EOF,
+			Value: "",
+		}
+	}
+	return t.tokens[idx]
+}
+
+func (t *iterator) current() Token { return t.get(t.idx) }
