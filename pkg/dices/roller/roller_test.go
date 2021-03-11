@@ -57,6 +57,7 @@ func TestRoller_WithOptions(t *testing.T) {
 		{FromDice(dices.NewFromMax(6), 5, nil), opts, &Result{float64(fiveFirstsSum), funk.Reverse(fiveFirstsSortedRollResults).([]DiceResult), ""}},
 		{FromRoller(dices.NewFromMax(6), FromValue(2.0, nil), nil), opts, &Result{6.0, []DiceResult{{4, nil}, {2, nil}}, ""}},
 		{FromDice(dices.NewFromMax(6), 1, nil), []Option{Explode(HasValue(3))}, &Result{8.0, []DiceResult{{8, []int{3, 3, 2}}}, ""}},
+		{FromResultReference(&Result{12, []DiceResult{{3, nil}, {5, nil}}, ""}, nil), opts, &Result{12.0, nil, ""}},
 	}
 	for idx, tt := range tests {
 		t.Run(strconv.FormatInt(int64(idx), 10), func(t *testing.T) {

@@ -24,7 +24,7 @@ func applyResultOptions(options []Option, result *Result) *Result {
 	for _, opt := range options {
 		switch v := opt.(type) {
 		case ResultOption:
-			res = v(res)
+			res = v.Apply(res)
 		}
 	}
 	return res
@@ -34,7 +34,7 @@ func applyDiceResultOptions(options []Option, result DiceResult, dice dices.Dice
 	for _, opt := range options {
 		switch v := opt.(type) {
 		case DiceResultOption:
-			res = v(res, dice)
+			res = v.Apply(res, dice)
 		}
 	}
 	return res
@@ -197,5 +197,5 @@ func (t *withOperation) WithOptions(options []Option) Roller {
 }
 
 func (t *withOperation) Roll(expression string) *Result {
-	return applyResultOptions(t.options(), t.ops(t.left, t.right)(expression))
+	return applyResultOptions(t.options(), applyOps(t.ops, t.left, t.right, expression))
 }

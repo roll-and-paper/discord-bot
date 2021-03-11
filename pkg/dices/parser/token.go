@@ -16,6 +16,7 @@ const (
 	BracketOut // )
 	DoubleDot  // ..
 	Dot        // .
+	Comma      // ,
 	Pipe       // |
 	Dice       // d, D
 
@@ -43,8 +44,10 @@ const (
 
 	// Options
 	Keep           // k
+	KeepLower      // kl
 	KeepAndExplode // K
 	Sort           // s
+	SortAsc        // sl
 	Explode        // e
 
 	Count        // c

@@ -14,6 +14,7 @@ var simpleBinding = map[rune]TokenType{
 	']': BraceOut,
 	'(': BracketIn,
 	')': BracketOut,
+	',': Comma,
 	'|': Pipe,
 	'd': Dice,
 	'D': Dice,
@@ -26,9 +27,9 @@ var simpleBinding = map[rune]TokenType{
 	'x': Multiplication,
 	'/': Divide,
 	'÷': Divide,
-	'k': Keep,
+	//'k': Keep,
 	'K': KeepAndExplode,
-	's': Sort,
+	//'s': Sort,
 	'e': Explode,
 	'c': Count,
 	'r': Reroll,
@@ -76,6 +77,18 @@ func (s *Scanner) scan() (TokenType, string) {
 		return s.readNumber()
 	} else if t, ok := simpleBinding[ch]; ok {
 		return t, string(ch)
+	} else if ch == 'k' {
+		if next := s.read(); next == 'l' {
+			return KeepLower, "kl"
+		}
+		s.unread()
+		return Keep, string(ch)
+	} else if ch == 's' {
+		if next := s.read(); next == 'l' {
+			return SortAsc, "sl"
+		}
+		s.unread()
+		return Sort, string(ch)
 	} else if ch == '>' {
 		if next := s.read(); next == '=' {
 			return GreaterOrEqual, ">="

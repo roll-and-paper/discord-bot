@@ -1,25 +1,32 @@
 package roller
 
-type operation func(Roller, Roller) func(string) *Result
+type operation int
 
-func add(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Add(r2.Roll(s)) }
-}
-func minus(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Minus(r2.Roll(s)) }
-}
-func mul(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Mul(r2.Roll(s)) }
-}
-func div(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Div(r2.Roll(s)) }
-}
-func intDiv(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).IntDiv(r2.Roll(s)) }
-}
-func pow(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Pow(r2.Roll(s)) }
-}
-func mod(r1 Roller, r2 Roller) func(string) *Result {
-	return func(s string) *Result { return r1.Roll(s).Mod(r2.Roll(s)) }
+var (
+	add    operation = 0
+	minus  operation = 1
+	mul    operation = 2
+	div    operation = 3
+	intDiv operation = 4
+	pow    operation = 5
+	mod    operation = 6
+)
+
+func applyOps(op operation, r1 Roller, r2 Roller, s string) *Result {
+	switch op {
+	case minus:
+		return r1.Roll(s).Minus(r2.Roll(s))
+	case mul:
+		return r1.Roll(s).Mul(r2.Roll(s))
+	case div:
+		return r1.Roll(s).Div(r2.Roll(s))
+	case intDiv:
+		return r1.Roll(s).IntDiv(r2.Roll(s))
+	case pow:
+		return r1.Roll(s).Pow(r2.Roll(s))
+	case mod:
+		return r1.Roll(s).Mod(r2.Roll(s))
+	default: // Add by default
+		return r1.Roll(s).Add(r2.Roll(s))
+	}
 }
