@@ -105,7 +105,7 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 			ParentID: playersChannel.ID,
 			PermissionOverwrites: []*discordgo.PermissionOverwrite{
 				{ID: state.Roles.Master, Type: discordgo.PermissionOverwriteTypeRole, Allow: discord.AllPermissionForChannel},
-				{ID: guild.ID, Deny: discord.AllPermissionForChannelExceptView, Allow: discordgo.PermissionViewChannel},
+				{ID: guild.ID, Deny: discord.AllPermissionForChannelExceptView, Allow: discordgo.PermissionViewChannel | discordgo.PermissionReadMessageHistory},
 			},
 		})
 		if err != nil {
