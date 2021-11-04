@@ -13,6 +13,8 @@ builds:
       - linux
     goarch:
       - amd64
+    ldflags:
+      - -a -installsuffix cgo -s -w -X github.com/dohr-michael/roll-and-paper-bot/cmd.Version={{.ProjectName}} -X github.com/dohr-michael/roll-and-paper-bot/cmd.Revision={{.ShortCommit}} -X github.com/dohr-michael/roll-and-paper-bot/cmd.Time={{.Date}}
 archives: [ ]
 checksum:
   name_template: 'checksums.txt'

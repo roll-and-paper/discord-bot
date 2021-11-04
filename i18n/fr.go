@@ -1,6 +1,32 @@
 package i18n
 
 var fr = D{
+	"commands": D{
+		"roll": D{
+			"generic": D{
+				"description": "Effectue un lancé de dé sur base d'une formule",
+				"options": D{
+					"query": D{
+						"description": "formule à executer",
+					},
+				},
+			},
+			"vampire-dark-ages": D{
+				"description": "Effectue un lancé de dé sur le système Vampire Dark Ages",
+				"options": D{
+					"dices": D{
+						"description": "Nombre de dés à lancer",
+					},
+					"difficulty": D{
+						"description": "Difficulté du lancé",
+					},
+					"specialisation": D{
+						"description": "Nombre de spécialité",
+					},
+				},
+			},
+		},
+	},
 	"messages": D{
 		"welcome": "Hello.",
 		"config":  "Voilà la configuration de ton serveur : ",
@@ -25,6 +51,14 @@ var fr = D{
 				"help": "Command : {{.Config.Prefix}}set prefix `value`",
 			},
 		},
+		"help": `Voila les differents commandes dispo : 
+- **{{.Config.Prefix}}init** : Initialise le serveur, crée les rôles 'Joueurs' et 'MJ', crée les channels, ...
+- **{{.Config.Prefix}}set master @masterName** : Attribue un membre au rôle de maitre de jeu
+- **{{.Config.Prefix}}set player @playerName nom du personnage** : Attribue le rôle joueur, créer le channel associé et renomme le membre avec le nom du personnage
+- **{{.Config.Prefix}}set game-system** : change le système de jeu du serveur (dispo : vampire-dark-ages)
+- **{{.Config.Prefix}}set prefix newPrefix** : change le prefix utilisé par la valeur du nouveau prefix
+- Toute autre commande est interprété comme une expression de dé, en fonction du système de jeu du serveur actuel.
+`,
 		"oops": "Ooops, une erreur c'est produite",
 	},
 	"name": D{

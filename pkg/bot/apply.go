@@ -17,6 +17,9 @@ func (s *Services) Apply(msg *discordgo.Message, sess *discordgo.Session, state 
 		return s.Init(msg, sess, state)
 	case "set":
 		return s.Set(msg, sess, state, args)
+	case "help":
+		_, err := discord.SendMessage(msg.ChannelID, sess, state.Language, "messages.help", state)
+		return err
 	default: // Default action is trying to roll
 		return s.Roll(msg, sess, state, append([]string{cmd}, args...))
 	}

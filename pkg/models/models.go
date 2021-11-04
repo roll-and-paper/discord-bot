@@ -28,16 +28,22 @@ type Channels struct {
 	WithBot string `json:"withBot,omitempty" bson:"withBot,omitempty"`
 }
 
+type Commands struct {
+	Id   string `json:"id" bson:"id"`
+	Name string `json:"name,omitempty" bson:"name,omitempty"`
+}
+
 type ServerState struct {
-	Id            string    `json:"id" bson:"_id"`
-	Config        Config    `json:"config" bson:"config"`
-	Roles         Roles     `json:"roles" bson:"roles"`
-	Channels      Channels  `json:"channels" bson:"channels"`
-	Master        string    `json:"master,omitempty" bson:"master,omitempty"`
-	Players       []Player  `json:"players" bson:"players"`
-	CreatedAt     time.Time `json:"createdAt" bson:"createdAt"`
-	IsInitialized bool      `json:"isInitialized" bson:"isInitialized"`
-	Language      string    `json:"language" bson:"language"`
+	Id            string     `json:"id" bson:"_id"`
+	Config        Config     `json:"config" bson:"config"`
+	Roles         Roles      `json:"roles" bson:"roles"`
+	Channels      Channels   `json:"channels" bson:"channels"`
+	Master        string     `json:"master,omitempty" bson:"master,omitempty"`
+	Players       []Player   `json:"players" bson:"players"`
+	CreatedAt     time.Time  `json:"createdAt" bson:"createdAt"`
+	IsInitialized bool       `json:"isInitialized" bson:"isInitialized"`
+	Language      string     `json:"language" bson:"language"`
+	Commands      []Commands `json:"commands,omitempty" bson:"commands,omitempty"`
 }
 
 func NewServerState(id string) *ServerState {
@@ -49,5 +55,6 @@ func NewServerState(id string) *ServerState {
 		Players:   make([]Player, 0),
 		Language:  Fr,
 		CreatedAt: time.Now(),
+		Commands:  make([]Commands, 0),
 	}
 }

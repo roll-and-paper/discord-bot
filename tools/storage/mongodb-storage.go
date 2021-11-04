@@ -20,6 +20,23 @@ func NewMongoDBStorage(database *mongo.Database, collection string) Storage {
 	}
 }
 
+func (m *mongoDB) FindAll(result interface{}, context context.Context) error {
+	cursor, err := m.database.Collection(m.collection).Find(context, bson.M{})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil
+		}
+		return err
+	}
+	if err := cursor.All(context, result); err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil
+		}
+		return err
+	}
+	return nil
+}
+
 func (m *mongoDB) FindOne(id string, result interface{}, context context.Context) error {
 	cursor := m.database.Collection(m.collection).FindOne(context, bson.M{"_id": id})
 	if cursor.Err() != nil {

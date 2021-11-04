@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dohr-michael/roll-and-paper-bot/i18n"
+	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot/commands"
 	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"log"
@@ -39,7 +40,7 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 		if err != nil {
 			return err
 		}
-		masterRole, err = sess.GuildRoleEdit(guild.ID, masterRole.ID, i18n.Must(state.Language, "name.role.master", nil), discord.GOLD, true, int(masterRole.Permissions), false)
+		masterRole, err = sess.GuildRoleEdit(guild.ID, masterRole.ID, i18n.Must(state.Language, "name.role.master", nil), discord.GOLD, true, masterRole.Permissions, false)
 		if err != nil {
 			return err
 		}
@@ -59,7 +60,7 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 		if err != nil {
 			return err
 		}
-		playersRole, err = sess.GuildRoleEdit(guild.ID, playersRole.ID, i18n.Must(state.Language, "name.role.players", nil), discord.DARK_GREEN, true, int(playersRole.Permissions), false)
+		playersRole, err = sess.GuildRoleEdit(guild.ID, playersRole.ID, i18n.Must(state.Language, "name.role.players", nil), discord.DARK_GREEN, true, playersRole.Permissions, false)
 		if err != nil {
 			return err
 		}
@@ -128,5 +129,6 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 	}
 	_ = sess.MessageReactionAdd(msg.ChannelID, msg.ID, "👌")
 
+	commands.Register(sess, state)
 	return nil
 }
