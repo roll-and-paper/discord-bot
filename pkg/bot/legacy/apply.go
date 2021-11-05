@@ -1,4 +1,4 @@
-package bot
+package legacy
 
 import (
 	"github.com/bwmarrin/discordgo"

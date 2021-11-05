@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dohr-michael/roll-and-paper-bot/config"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot"
 	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot/commands"
 	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot/components"
+	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot/legacy"
 	"github.com/dohr-michael/roll-and-paper-bot/pkg/models"
+	"github.com/dohr-michael/roll-and-paper-bot/pkg/services"
 	"github.com/dohr-michael/roll-and-paper-bot/pkg/shared"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/storage"
@@ -60,19 +61,20 @@ func onEvent(id, guildId, command string, col storage.Storage, lock *discord.Loc
 	fn(state)
 }
 
-func onReadyHandler(col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.Ready) {
+func onReadyHandler(cmd *commands.Services, col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.Ready) {
 	return func(session *discordgo.Session, evt *discordgo.Ready) {
 		for _, g := range evt.Guilds {
 			onEvent(fmt.Sprintf("%s-%s", shared.Revision, g.ID), g.ID, fmt.Sprintf("init_commands_%s", g.ID), col, lock, func(state *models.ServerState) {
-				commands.Register(session, state)
+				cmd.Register(session, state)
 			})
 		}
 	}
 }
 
-func onInteractionHandler(serv *bot.Services, col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.InteractionCreate) {
+func onInteractionHandler(cmd *commands.Services, col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.InteractionCreate) {
 	return func(session *discordgo.Session, evt *discordgo.InteractionCreate) {
 		onEvent(evt.ID, evt.GuildID, "on_interaction", col, lock, func(state *models.ServerState) {
+			cmd.Handle(session, evt, state)
 			switch evt.Type {
 			case discordgo.InteractionApplicationCommand:
 				if fn, ok := components.Application[evt.ApplicationCommandData().Name]; ok {
@@ -87,7 +89,7 @@ func onInteractionHandler(serv *bot.Services, col storage.Storage, lock *discord
 	}
 }
 
-func onMessageHandler(serv *bot.Services, col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.MessageCreate) {
+func onMessageHandler(serv *legacy.Services, col storage.Storage, lock *discord.Lock) func(*discordgo.Session, *discordgo.MessageCreate) {
 	return func(sess *discordgo.Session, msg *discordgo.MessageCreate) {
 		log.Printf("on message")
 
@@ -147,7 +149,9 @@ func Start() error {
 		return err
 	}
 
-	serv := bot.New(s)
+	srv := services.NewServices(s)
+	cmd := commands.NewServices(srv)
+	leg := legacy.New(srv, s)
 
 	dis.AddHandler(func(s *discordgo.Session, r *discordgo.GuildCreate) {
 		log.Printf("guild join %s", r.ID)
@@ -156,9 +160,9 @@ func Start() error {
 		log.Printf("guild leave %s", r.ID)
 	})
 
-	dis.AddHandler(onReadyHandler(s, lock))
-	dis.AddHandler(onMessageHandler(serv, s, lock))
-	dis.AddHandler(onInteractionHandler(serv, s, lock))
+	dis.AddHandler(onReadyHandler(cmd, s, lock))
+	dis.AddHandler(onInteractionHandler(cmd, s, lock))
+	dis.AddHandler(onMessageHandler(leg, s, lock))
 
 	dis.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuildMessageReactions
 

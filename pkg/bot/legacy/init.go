@@ -1,10 +1,9 @@
-package bot
+package legacy
 
 import (
 	"context"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dohr-michael/roll-and-paper-bot/i18n"
-	"github.com/dohr-michael/roll-and-paper-bot/pkg/bot/commands"
 	gp "github.com/dohr-michael/roll-and-paper-bot/pkg/models"
 	"github.com/dohr-michael/roll-and-paper-bot/tools/discord"
 	"log"
@@ -129,6 +128,6 @@ func (s *Services) Init(msg *discordgo.Message, sess *discordgo.Session, state *
 	}
 	_ = sess.MessageReactionAdd(msg.ChannelID, msg.ID, "👌")
 
-	commands.Register(sess, state)
+	s.cmd.Register(sess, state)
 	return nil
 }

@@ -6,7 +6,7 @@ var fr = D{
 			"generic": D{
 				"description": "Effectue un lancé de dé sur base d'une formule",
 				"options": D{
-					"query": D{
+					"expression": D{
 						"description": "formule à executer",
 					},
 				},
@@ -99,6 +99,9 @@ var fr = D{
 			},
 			"init": D{
 				"unauthorized": "seul le propriétaire du serveur peu m'initialiser",
+			},
+			"roll": D{
+				"unknown-game-system": "je n'ai pas de règles pour effectuer un jet sur le système choisi",
 			},
 			"unknown": "Commande inconnue : {0}",
 		},
